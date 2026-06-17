@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TARCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
 UCLASS()
 class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
 {
@@ -16,6 +18,12 @@ public:
 	ATARCharacter();
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArmComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CameraComp;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
