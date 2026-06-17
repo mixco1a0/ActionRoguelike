@@ -5,6 +5,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
 // Sets default values
 ATARCharacter::ATARCharacter()
 {
@@ -37,5 +40,72 @@ void ATARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	const APlayerController* PC = GetController<APlayerController>();
+	const ULocalPlayer* LP = PC->GetLocalPlayer();
+
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = LP->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+	check(Subsystem);
+
+	Subsystem->ClearAllMappings();
+
+	// complex games may have more 
+	Subsystem->AddMappingContext(DefaultInputMapping, 0);
+
+	UEnhancedInputComponent* InputComp = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+
+	// general input
+	InputComp->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ATARCharacter::Move);
+
+	// m+k
+	InputComp->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ATARCharacter::LookMouse);
+	// gamepad
+	InputComp->BindAction(Input_LookStick, ETriggerEvent::Triggered, this, &ATARCharacter::LookStick);
 }
 
+void ATARCharacter::Move(const FInputActionInstance& Instance)
+{
+	FRotator ControlRot = GetControlRotation();
+	ControlRot.Pitch = 0.0f;
+	ControlRot.Roll = 0.0f;
+
+	const FVector2D AxisValue = Instance.GetValue().Get<FVector2D>();
+	AddMovementInput(ControlRot.Vector(), AxisValue.Y);
+
+	const FVector RightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
+	AddMovementInput(RightVector, AxisValue.X);
+}
+
+void ATARCharacter::LookMouse(const FInputActionValue& InputValue)
+{
+	const FVector2D Value = InputValue.Get<FVector2D>();
+
+	AddControllerYawInput(Value.X);
+	AddControllerPitchInput(Value.Y);
+}
+
+void ATARCharacter::LookStick(const FInputActionValue& InputValue)
+{
+	FVector2D Value = InputValue.Get<FVector2D>();
+
+	// track negative as conversion loses this
+	const bool XNegative = Value.X < 0.f;
+	const bool YNegative = Value.Y < 0.f;
+
+	// sensitivity
+	static const float LookYawRate = 100.f;
+	static const float LookPitchRate = 50.f;
+
+	// non-linear to make aiming easier
+	Value = Value * Value;
+	if (XNegative)
+	{
+		Value.X *= -1.f;
+	}
+	if (YNegative)
+	{
+		Value.Y *= -1.f;
+	}
+
+	AddControllerYawInput(Value.X * LookYawRate * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(Value.Y * LookPitchRate * GetWorld()->GetDeltaSeconds());
+}

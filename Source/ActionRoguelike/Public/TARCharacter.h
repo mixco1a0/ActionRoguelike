@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputAction.h"
 #include "TARCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
+
 UCLASS()
 class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
 {
@@ -18,6 +22,18 @@ public:
 	ATARCharacter();
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputMappingContext* DefaultInputMapping;
+
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	UInputAction* Input_Move;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_LookMouse;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_LookStick;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
@@ -26,6 +42,10 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void Move(const FInputActionInstance& Instance);
+	void LookMouse(const FInputActionValue& InputValue);
+	void LookStick(const FInputActionValue& InputValue);
 
 public:	
 	// Called every frame
