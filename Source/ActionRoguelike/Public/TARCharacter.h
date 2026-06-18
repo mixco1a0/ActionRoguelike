@@ -17,11 +17,17 @@ class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> MagicProjectileClass;
+
 public:
 	// Sets default values for this character's properties
 	ATARCharacter();
 
 protected:
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputMappingContext* DefaultInputMapping;
 
@@ -33,6 +39,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Input_LookStick;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_MagicProjectile;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -46,6 +55,8 @@ protected:
 	void Move(const FInputActionInstance& Instance);
 	void LookMouse(const FInputActionValue& InputValue);
 	void LookStick(const FInputActionValue& InputValue);
+
+	void CastMagicProjectile();
 
 public:	
 	// Called every frame
