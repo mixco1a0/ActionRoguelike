@@ -152,5 +152,5 @@ void ATARCharacter::CastMagicProjectile()
 
 void ATARCharacter::Jump()
 {
-	ACharacter::Jump();
+	Super::Jump();
 }
