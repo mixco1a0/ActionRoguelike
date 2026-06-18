@@ -4,9 +4,12 @@
 #include "TARCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATARCharacter::ATARCharacter()
@@ -15,10 +18,15 @@ ATARCharacter::ATARCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
+	SpringArmComp->bUsePawnControlRotation = true;
 	SpringArmComp->SetupAttachment(RootComponent);
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	bUseControllerRotationYaw = false;
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +41,21 @@ void ATARCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Rotation Visualization
+	const float DrawScale = 100.f;
+	const float Thickness = 5.f;
+
+	FVector LineStart = GetActorLocation();
+	// offset to the right of the pawn
+	LineStart += GetActorRightVector() * 100;
+	// set line end in direction of actors forward
+	FVector ActorDirection_LineEnd = LineStart + (GetActorForwardVector() * 100.f);
+	// draw actor's direction
+	DrawDebugDirectionalArrow(GetWorld(), LineStart, ActorDirection_LineEnd, DrawScale, FColor::Yellow, false, 0.0f, 0, Thickness);
+
+	FVector ControllerDirection_LineEnd = LineStart + (GetControlRotation().Vector() * 100.f);
+	// draw controller rotation that possessed this character
+	DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
 }
 
 // Called to bind functionality to input
@@ -67,6 +90,10 @@ void ATARCharacter::Move(const FInputActionInstance& Instance)
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;
+
+	// X - Forward - Red
+	// Y - Right - Green
+	// Z - Up - Blue
 
 	const FVector2D AxisValue = Instance.GetValue().Get<FVector2D>();
 	AddMovementInput(ControlRot.Vector(), AxisValue.Y);
