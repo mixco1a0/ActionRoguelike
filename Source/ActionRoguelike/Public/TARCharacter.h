@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Input_MagicProjectile;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_Jump;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
@@ -57,6 +60,7 @@ protected:
 	void LookStick(const FInputActionValue& InputValue);
 
 	void CastMagicProjectile();
+	void Jump() override;
 
 public:	
 	// Called every frame

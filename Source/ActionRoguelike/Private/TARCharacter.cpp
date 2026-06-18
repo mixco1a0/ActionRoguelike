@@ -79,6 +79,7 @@ void ATARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	// general input
 	InputComp->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ATARCharacter::Move);
 	InputComp->BindAction(Input_MagicProjectile, ETriggerEvent::Triggered, this, &ATARCharacter::CastMagicProjectile);
+	InputComp->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ATARCharacter::Jump);
 
 	// m+k
 	InputComp->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ATARCharacter::LookMouse);
@@ -147,4 +148,9 @@ void ATARCharacter::CastMagicProjectile()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor<AActor>(MagicProjectileClass, SpawnTM, SpawnParams);
+}
+
+void ATARCharacter::Jump()
+{
+	ACharacter::Jump();
 }
