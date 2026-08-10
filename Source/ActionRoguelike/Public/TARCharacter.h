@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UTARInteractionComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
@@ -46,11 +47,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Input_Jump;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_PrimaryInteract;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UTARInteractionComponent* InteractionComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -61,6 +68,7 @@ protected:
 
 	void CastMagicProjectile();
 	void Jump() override;
+	void PrimaryInteract();
 
 public:	
 	// Called every frame

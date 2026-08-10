@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "TARInteractionComponent.h"
+
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -23,6 +25,8 @@ ATARCharacter::ATARCharacter()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComp = CreateDefaultSubobject<UTARInteractionComponent>("InteractionComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -85,6 +89,7 @@ void ATARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	InputComp->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ATARCharacter::Move);
 	InputComp->BindAction(Input_MagicProjectile, ETriggerEvent::Triggered, this, &ATARCharacter::CastMagicProjectile);
 	InputComp->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ATARCharacter::Jump);
+	InputComp->BindAction(Input_PrimaryInteract, ETriggerEvent::Triggered, this, &ATARCharacter::PrimaryInteract);
 
 	// m+k
 	InputComp->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ATARCharacter::LookMouse);
@@ -158,4 +163,9 @@ void ATARCharacter::CastMagicProjectile()
 void ATARCharacter::Jump()
 {
 	Super::Jump();
+}
+
+void ATARCharacter::PrimaryInteract()
+{
+	InteractionComp->PrimaryInteract();
 }
