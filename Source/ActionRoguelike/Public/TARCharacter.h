@@ -11,6 +11,8 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UTARInteractionComponent;
+class UAnimMontage;
 
 UCLASS()
 class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
@@ -19,8 +21,14 @@ class ACTIONROGUELIKE_API ATARCharacter : public ACharacter
 
 protected:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> MagicProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	UAnimMontage* AttackAnim;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+	float PrimaryAttackSpawnTimer;
 
 public:
 	// Sets default values for this character's properties
@@ -41,16 +49,22 @@ protected:
 	UInputAction* Input_LookStick;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* Input_MagicProjectile;
+	UInputAction* Input_PrimaryAttack;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Input_Jump;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Input_PrimaryInteract;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UTARInteractionComponent* InteractionComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -59,8 +73,10 @@ protected:
 	void LookMouse(const FInputActionValue& InputValue);
 	void LookStick(const FInputActionValue& InputValue);
 
-	void CastMagicProjectile();
+	void PrimaryAttack();
+	void PrimaryAttack_TimeElapsed();
 	void Jump() override;
+	void PrimaryInteract();
 
 public:	
 	// Called every frame
@@ -68,5 +84,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	void DrawDebugArrows();
 
 };

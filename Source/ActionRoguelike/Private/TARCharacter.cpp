@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "TARInteractionComponent.h"
+
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -24,9 +26,12 @@ ATARCharacter::ATARCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
+	InteractionComp = CreateDefaultSubobject<UTARInteractionComponent>("InteractionComp");
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
+	PrimaryAttackSpawnTimer = 0.2f;
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +46,11 @@ void ATARCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	DrawDebugArrows();
+}
+
+void ATARCharacter::DrawDebugArrows()
+{
 	// Rotation Visualization
 	const float DrawScale = 100.f;
 	const float Thickness = 5.f;
@@ -78,8 +88,9 @@ void ATARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// general input
 	InputComp->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ATARCharacter::Move);
-	InputComp->BindAction(Input_MagicProjectile, ETriggerEvent::Triggered, this, &ATARCharacter::CastMagicProjectile);
+	InputComp->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ATARCharacter::PrimaryAttack);
 	InputComp->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ATARCharacter::Jump);
+	InputComp->BindAction(Input_PrimaryInteract, ETriggerEvent::Triggered, this, &ATARCharacter::PrimaryInteract);
 
 	// m+k
 	InputComp->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ATARCharacter::LookMouse);
@@ -139,7 +150,14 @@ void ATARCharacter::LookStick(const FInputActionValue& InputValue)
 	AddControllerPitchInput(Value.Y * LookPitchRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ATARCharacter::CastMagicProjectile()
+void ATARCharacter::PrimaryAttack()
+{
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATARCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackSpawnTimer);
+}
+
+void ATARCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
@@ -153,4 +171,9 @@ void ATARCharacter::CastMagicProjectile()
 void ATARCharacter::Jump()
 {
 	Super::Jump();
+}
+
+void ATARCharacter::PrimaryInteract()
+{
+	InteractionComp->PrimaryInteract();
 }

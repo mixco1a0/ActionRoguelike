@@ -6,6 +6,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
+#include "DrawDebugHelpers.h"
+
 // Sets default values
 ATARMagicProjectile::ATARMagicProjectile()
 {
@@ -23,19 +25,32 @@ ATARMagicProjectile::ATARMagicProjectile()
 	MovementComp->InitialSpeed = InitialSpeed;
 	MovementComp->bRotationFollowsVelocity = true;
 	MovementComp->bInitialVelocityInLocalSpace = true;
+
+	DrawDebugArrowTimer = 0.1f;
 }
 
 // Called when the game starts or when spawned
 void ATARMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	DrawDebugArrow();
 }
 
 // Called every frame
 void ATARMagicProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void ATARMagicProjectile::DrawDebugArrow()
+{
+	const float DrawScale = 100.f;
+	const float Thickness = 5.f;
+	FVector LineStart = GetActorLocation();
+	FVector LineEnd = LineStart + GetActorForwardVector() * 100.f;
+	DrawDebugDirectionalArrow(GetWorld(), LineStart, LineEnd, DrawScale, FColor::Purple, false, DrawDebugArrowTimer * 5.f, 0, Thickness);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_DrawDebugArrow, this, &ATARMagicProjectile::DrawDebugArrow, DrawDebugArrowTimer);
 }
 
