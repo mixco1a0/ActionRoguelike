@@ -41,6 +41,11 @@ void ATARCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	DrawDebugArrows();
+}
+
+void ATARCharacter::DrawDebugArrows()
+{
 	// Rotation Visualization
 	const float DrawScale = 100.f;
 	const float Thickness = 5.f;
