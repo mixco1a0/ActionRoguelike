@@ -14,6 +14,10 @@ UCLASS()
 class ACTIONROGUELIKE_API ATARMagicProjectile : public AActor
 {
 	GENERATED_BODY()
+
+	FTimerHandle TimerHandle_DrawDebugArrow;
+	float DrawDebugArrowTimer;
+	void DrawDebugArrow();
 	
 public:	
 	// Sets default values for this actor's properties
