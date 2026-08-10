@@ -65,6 +65,7 @@ void UTARInteractionComponent::PrimaryInteract()
 			{
 				APawn* MyPawn = Cast<APawn>(GetOwner());
 				ITARGameplayInterface::Execute_Interact(HitActor, MyPawn);
+				break;
 			}
 		}
 
