@@ -31,6 +31,7 @@ ATARCharacter::ATARCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
+	PrimaryAttackSpawnTimer = 0.2f;
 }
 
 // Called when the game starts or when spawned
@@ -87,7 +88,7 @@ void ATARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// general input
 	InputComp->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ATARCharacter::Move);
-	InputComp->BindAction(Input_MagicProjectile, ETriggerEvent::Triggered, this, &ATARCharacter::CastMagicProjectile);
+	InputComp->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ATARCharacter::PrimaryAttack);
 	InputComp->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ATARCharacter::Jump);
 	InputComp->BindAction(Input_PrimaryInteract, ETriggerEvent::Triggered, this, &ATARCharacter::PrimaryInteract);
 
@@ -149,7 +150,14 @@ void ATARCharacter::LookStick(const FInputActionValue& InputValue)
 	AddControllerPitchInput(Value.Y * LookPitchRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ATARCharacter::CastMagicProjectile()
+void ATARCharacter::PrimaryAttack()
+{
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATARCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackSpawnTimer);
+}
+
+void ATARCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
