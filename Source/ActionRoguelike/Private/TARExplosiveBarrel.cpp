@@ -37,7 +37,10 @@ void ATARExplosiveBarrel::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StaticMeshComp->OnComponentHit.AddDynamic(this, &ATARExplosiveBarrel::OnHit);
+	if (!StaticMeshComp->OnComponentHit.IsAlreadyBound(this, &ATARExplosiveBarrel::OnHit))
+	{
+		StaticMeshComp->OnComponentHit.AddDynamic(this, &ATARExplosiveBarrel::OnHit);
+	}
 }
 
 // Called every frame
