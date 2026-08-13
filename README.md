@@ -2,6 +2,15 @@
 
 A project-based repository tracking progress through Tom Looman's [Professional Game Development in C++ and Unreal Engine](https://courses.tomlooman.com/p/unrealengine-cpp) course, featuring custom C++ framework, AI, and multiplayer systems.
 
+## 🗂️ Repository Structure
+```text
+├─ Config/         # Project configuration files
+├─ Content/        # Blueprints, materials, maps, and assets
+├─ Source/         # C++ source files
+├─ LICENSE.md
+└─ README.md
+```
+
 ## 🛠️ Development Environment
 - **Unreal Engine Version:** `5.8`
 - **Development Model:** C++ Core with Blueprint Extensions
@@ -60,10 +69,5 @@ A project-based repository tracking progress through Tom Looman's [Professional 
   - [ ] Replicating Power-ups
 </details>
 
-## 🗂️ Repository Structure
-```text
-├── Config/         # Project configuration files
-├── Content/        # Blueprints, materials, maps, and assets
-├── Source/         # C++ source files
-└── README.md
-```
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
