@@ -9,24 +9,61 @@ A project-based repository tracking progress through Tom Looman's [Professional 
 
 ## 📚 Course Curriculum & Roadmap Tracker
 
-### Phase 1: Gameplay & Core Systems (Lectures 2-9)
-- [ ] Collision traces & interfaces.
-- [ ] Exposing C++ to Blueprints & debugging.
-- [ ] UMG UI & dynamic materials.
+### 📦 Phase 1: Gameplay & Core Systems (Lectures 2-9)
+- Collision traces & interfaces.
+- Exposing C++ to Blueprints & debugging.
+- UMG UI & dynamic materials.
+<details>
+<summary><b>Assignments</b></summary>
 
-### Phase 2: AI & Advanced Systems (Lectures 10-18)
-- [ ] Behavior Trees & EQS (Environment Query System).
-- [ ] Custom Action System with `GameplayTags`.
+- [x] Assignment 1:
+  - [x] Character Jump
+  - [x] Explosive Barrel
+- [ ] Assignment 2:
+  - [ ] Blackhole Projectile
+  - [ ] Dash Ability
+  - [ ] Targetting
+- [ ] Assignment 3:
+  - [ ] Health & Damage
+  - [ ] Audio
+  - [ ] Projectiles
+  - [ ] UI
+</details>
 
-### Phase 3: Networking & Polish (Lectures 19-28)
-- [ ] Client-Server replication & RPCs.
-- [ ] Save/Load system.
-- [ ] Performance profiling & Async Loading.
+### 📦 Phase 2: AI & Advanced Systems (Lectures 10-18)
+- Behavior Trees & EQS (Environment Query System).
+- Custom Action System with `GameplayTags`.
+<details>
+<summary><b>Assignments</b></summary>
+
+- [ ] Assignment 4:
+  - [ ] Expanding AI Behavior
+- [ ] Assignment 5:
+  - [ ] Credits System
+  - [ ] EQS Spawning
+- [ ] Assignment 6:
+  - [ ] Rage
+  - [ ] Thorns
+  - [ ] Power-up
+  - [ ] Spotted UI
+</details>
+
+### 📦 Phase 3: Networking & Polish (Lectures 19-28)
+- Client-Server replication & RPCs.
+- Save/Load system.
+- Performance profiling & Async Loading.
+<details>
+<summary><b>Assignments</b></summary>
+
+- [ ] Assignment 7:
+  - [ ] Replicating Attributes
+  - [ ] Replicating Power-ups
+</details>
 
 ## 🗂️ Repository Structure
 ```text
-├── Config/             # Project configuration files
-├── Content/            # Blueprints, materials, maps, and assets
-├── Source/             # C++ source files
+├── Config/         # Project configuration files
+├── Content/        # Blueprints, materials, maps, and assets
+├── Source/         # C++ source files
 └── README.md
 ```
